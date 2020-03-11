@@ -87,7 +87,7 @@ def factorisation(n):
     return F
 
 
-# crypte et decrypt un chiffre avec p,q,e genere aleatoirement
+# crypter et decrypter un chiffre avec p,q,e genere aleatoirement
 def crypterDecrypterChiffre():
     p, q = getPAndQ()  # calcule de p et q
     while p == q:
@@ -103,27 +103,47 @@ def crypterDecrypterChiffre():
     print('p =', p, '/ q =', q, '/ n =', n, '/ phiN =', phiN)
     print('Kp:(', e, ';', n, ')')
     print('Kpr:(', d, ';', n, ')')
-    aChiffrer = int(input("Entrez un chiffre à crypter : "))  # si on veut entrer le chiffre a crypter et decrypter
-    # aChiffrer = random.randint(0, n - 1)  # on choisit un chiffre aléatoirement entre 0 et n-1
-    while aChiffrer >= n:  # tant que le chiffre est superieur ou egale a n
-        print('Entrez une valeur inférieur à', n)
-        aChiffrer = int(input("Entrez un chiffre à crypter : "))
-    cCrypter = chiffrement(aChiffrer, e, n)  # on crypte le chiffre
-    print(aChiffrer, 'chiffré :', cCrypter)  # on affiche le chiffre crypte
-    cDecrypter = dechiffrement(cCrypter, d, n)  # on decrypte le chiffre crypte
-    print(cCrypter, 'déchiffré :', cDecrypter)  # on affiche le chiffre decrypte
+    choix = str(input("Voulez-vous entrer un chiffre (y/n)? "))
+    if choix == 'y':    #si on veut entrer un chiffre
+        aChiffrer = int(input("Entrez un chiffre : "))  # si on veut entrer le chiffre a crypter et decrypter
+        while aChiffrer >= n:  # tant que le chiffre est superieur ou egale a n
+            print('Entrez un chiffre inférieur à', n)
+            aChiffrer = int(input("Entrez un chiffre : "))
+    elif choix == 'n': #si on ne veut pas
+        choix = str(input("Voulez-vous générer un chiffre (y/n) ? "))
+        if choix == 'y':    # si on veut generer un nombre
+            aChiffrer = random.randint(0, n - 1)  # on choisit un chiffre aléatoirement entre 0 et n-1
+        else:   # sinon
+            print('Au revoir !')
+            return
+    else:   # si autre chose est rentré
+        print('Je n\'ai pas compris votre demande !')
+        print('Au revoir !')
+        return
+    choix = str(input('Crypter le chiffre (y/n) ? '))
+    if choix == 'y':    # si on veut crypter le chiffre
+        cCrypter = chiffrement(aChiffrer, e, n)  # on crypte le chiffre
+        print(aChiffrer, 'chiffré donne ', cCrypter)  # on affiche le chiffre crypte
+    elif choix == 'n':  # si on ne veut pas le crypter
+        choix = str(input('Decrypter le chiffre (y/n) ? '))
+        if choix == 'y':    # si on veut dechiffrer le chiffre
+            cDecrypter = dechiffrement(aChiffrer, d, n)  # on decrypte le chiffre crypte
+            print(aChiffrer, 'déchiffré donne ', cDecrypter)  # on affiche le chiffre decrypte
+        else:   #sinon
+            print('Annulation...')
+            print('Au revoir !')
+            return
 
 
 # decrypte un message trouver p,q,d sachant e,n,
 def decryptMessageAvecKp(e, n, message):
     L = []  # creation d'une liste ou
     p, q = factorisation(n)
-    phiN = (p - 1) * (q - 1)
-    d = algoEuclidien(e, phiN)
-    print('p =', p, 'q =', q, 'phiN :', phiN, 'd =', d)
+    phiN = (p - 1) * (q - 1)    # calcule de phi(n)
+    d = algoEuclidien(e, phiN)  # calcule de d
     for i in range(len(message)):
-        cDecrypter = dechiffrement(message[i], d, n)
-        L.append(cDecrypter)
+        cDecrypter = dechiffrement(message[i], d, n)    # on decrypte le chiffre a l'indice i
+        L.append(cDecrypter)    # on ajoute la valeur decrypte a la liste
     print(L)
 
 
