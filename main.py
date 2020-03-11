@@ -141,10 +141,10 @@ def crypteText(e, n):
         N = pow(N, tuple) - 1
     print('N =', N, '; k =', k, '; n =', n, '; e =', e, '; n =', n, '; tuple(s) =', tuple)
     message = "ENVOYEZ"
+    print(message)
     liste = []
     if int(len(message) / k) % 2 == 1:
         longueur = int(len(message) / k) + 1
-        print(longueur)
     else:
         longueur = int(len(message) / k)
     for i in range(0, longueur):
@@ -153,13 +153,9 @@ def crypteText(e, n):
             if j >= len(message):  # si on est a la fin du mot
                 liste[i].append('A')  # on met A
                 break
-            print(i)
             liste[i].append(message[j])  # on ajoute le caractere
-    print(len(liste))
     listeB = []
     lettre = liste[0][0]
-    print(lettre)
-    print(liste[0])
     for i in range(len(liste)):
         for j in range(len(liste[i])):
             lettre = liste[i][j]
