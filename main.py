@@ -4,10 +4,10 @@ import math
 
 # calcule le pgcd
 def pgcd(a, b):
-    if b == 0:
+    if b == 0:  # si on compare a et rien
         return a
     else:
-        r = a % b
+        r = a % b   # r = a mod b
         return pgcd(b, r)
 
 
@@ -17,21 +17,20 @@ def estpremier(n):
     i = 2
     while i < nombre and nombre % i != 0:
         i = i + 1
-    if i == nombre:
+    if i == nombre: # si on arrive a i = nombre
         return True
-    else:
+    else:   # sinon si on arrive a nombre % i == 0
         return False
 
 
 # calcule p et q
 def getPAndQ():
-    p = random.randint(1, 100)
-    q = random.randint(1, 100)
-    estpremier(p)
-    while not estpremier(p):
-        p = random.randint(1, 100)
-    while not estpremier(q):
-        q = random.randint(1, 100)
+    p = random.randint(1, 100)  # entier aléatoire entre 1 et 100
+    q = random.randint(1, 100)  # entier aléatoire entre 1 et 100
+    while not estpremier(p):    # tant que p n'est pas premier
+        p = random.randint(1, 100)  # on retire p aléatoirement
+    while not estpremier(q):    # tant que p n'est pas premier
+        q = random.randint(1, 100)  # on retire q aléatoirement
     return p, q
 
 
@@ -48,13 +47,13 @@ def algoEuclidien(e, phiN):
 
 # crypte un chiffre
 def chiffrement(chiffre, e, n):
-    C = pow(chiffre, e, n)
+    C = pow(chiffre, e, n)  # -> pow(chiffre,e)%n
     return C
 
 
 # decrypte un chiffre
 def dechiffrement(chiffrement, d, n):
-    M = pow(chiffrement, d, n)
+    M = pow(chiffrement, d, n)  # -> pow(chiffre,d)%n
     return M
 
 
@@ -62,8 +61,8 @@ def dechiffrement(chiffrement, d, n):
 def factorisation(n):
     p = n - 2
     while n % p != 0:
-        p = p - 2
-    q = int(n / p)
+        p = p - 2   # saut de 2 en 2 pour aller plus vite
+    q = int(n / p)  # comme n = p*q -> q = n/p
     return p, q
 
 
@@ -100,25 +99,38 @@ def crypterDecrypterChiffre():
         print('Je n\'ai pas compris votre demande !')
         print('Au revoir !')
         return
-    choix = str(input('Crypter le chiffre (y/n) ? '))
-    if choix == 'y':  # si on veut crypter le chiffre
+    choix = str(input('Crypter et décrypter le chiffre (y/n) ? '))
+    if choix == 'y':
         cCrypter = chiffrement(aChiffrer, e, n)  # on crypte le chiffre
         print(aChiffrer, 'chiffré donne ', cCrypter)  # on affiche le chiffre crypte
-    elif choix == 'n':  # si on ne veut pas le crypter
-        choix = str(input('Decrypter le chiffre (y/n) ? '))
-        if choix == 'y':  # si on veut dechiffrer le chiffre
-            cDecrypter = dechiffrement(aChiffrer, d, n)  # on decrypte le chiffre crypte
-            print(aChiffrer, 'déchiffré donne ', cDecrypter)  # on affiche le chiffre decrypte
-        else:  # sinon
+        cDecrypter = dechiffrement(cCrypter, d, n)  # on decrypte le chiffre crypte
+        print(cCrypter, 'déchiffré donne ', cDecrypter)  # on affiche le chiffre decrypte
+    elif choix == 'n':
+        choix = str(input('Crypter le chiffre (y/n) ? '))
+        if choix == 'y':  # si on veut crypter le chiffre
+            cCrypter = chiffrement(aChiffrer, e, n)  # on crypte le chiffre
+            print(aChiffrer, 'chiffré donne ', cCrypter)  # on affiche le chiffre crypte
+        elif choix == 'n':  # si on ne veut pas le crypter
+            choix = str(input('Decrypter le chiffre (y/n) ? '))
+            if choix == 'y':  # si on veut dechiffrer le chiffre
+                cDecrypter = dechiffrement(aChiffrer, d, n)  # on decrypte le chiffre crypte
+                print(aChiffrer, 'déchiffré donne ', cDecrypter)  # on affiche le chiffre decrypte
+            else:  # sinon
+                print('Annulation...')
+                print('Au revoir !')
+                return
+        else:
             print('Annulation...')
             print('Au revoir !')
-            return
+    else:
+        print('Annulation...')
+        print('Au revoir !')
 
 
 # decrypte un message trouver p,q,d sachant e,n,
 def decryptMessageAvecKp(e, n, message):
     L = []  # creation d'une liste ou
-    p, q = factorisation(n)
+    p, q = factorisation(n) # on calcule p et q avec n
     print('p =', p, 'q =', q)
     phiN = (p - 1) * (q - 1)  # calcule de phi(n)
     d = algoEuclidien(e, phiN)  # calcule de d
@@ -128,46 +140,118 @@ def decryptMessageAvecKp(e, n, message):
     print(L)
 
 
-def crypteText(e, n):
-    N = 40  # nombre de caracteres auxquels on a droit
+# retourne un alphabet
+def getAlphabet():
     alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
                 'V', 'W', 'X', 'Y', 'Z', ' ', '.', '?', '€', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    k = int(math.log(n, N))  # k min est le nombre de tuple
-    print('k =', k)
+    return alphabet
+
+
+# calcule le nombre de tuple et N
+def getNbOfTheTupleAndNewN(k, N, n):
     tuple = k  # tuple quand on cryptera notre message
-    N = pow(N, tuple) - 1
-    while N < n:
+    tmp = pow(N, tuple) - 1
+    while tmp < n:
         tuple = tuple + 1
-        N = pow(N, tuple) - 1
-    print('N =', N, '; k =', k, '; n =', n, '; e =', e, '; n =', n, '; tuple(s) =', tuple)
-    message = "ENVOYEZ"
-    print(message)
+        tmp = pow(N, tuple) - 1
+    return tuple
+
+
+# mettre le message (chaine de caractere) sous forme de liste en séparant par bloc
+def fromMessageToList(message, k):
     liste = []
-    if int(len(message) / k) % 2 == 1:
+    if (len(message) / k) * 2 % 2 != 0: # obligé de mettre *2 -> si k=2 et len(mess)=6 -> divion=3 -> 3%2 !=0 => rajout d'un A
         longueur = int(len(message) / k) + 1
     else:
         longueur = int(len(message) / k)
     for i in range(0, longueur):
-        liste.append([])
-        for j in range(i * k, i * k + k):
+        liste.append([])    # liste où le message sera segmenter en paquet
+        for j in range(i * k, i * k + k):   # on fait des pas de k, car paquet de taille k
             if j >= len(message):  # si on est a la fin du mot
                 liste[i].append('A')  # on met A
                 break
             liste[i].append(message[j])  # on ajoute le caractere
-    listeB = []
-    lettre = liste[0][0]
+    return liste
+
+
+# recuperer les valeurs de chaque lettre du message
+def getValuesOfLetters(liste):
+    alphabet = getAlphabet()    # on recupere l'alphabet
+    listeValeur = []    # liste où il y aura la valeur de chaque lettre
     for i in range(len(liste)):
+        listeValeur.append([])
         for j in range(len(liste[i])):
-            lettre = liste[i][j]
+            lettre = liste[i][j]    # on recupere la lettre
             for k in range(len(alphabet)):
-                if alphabet[k] == lettre:
-                    listeB.append(k)
-    print(listeB)   # liste avec les valeurs
+                if alphabet[k] == lettre:   # on compare la lettre a l'alphabet, tant qu'on a pas trouver la lettre -> i++
+                    listeValeur[i].append(k)    # on recupere l'indice de la lettre et on considere que c'est la valeur
+    return listeValeur
+
+
+# converti les paquets en chiffre pret a etre crypter
+def paquetToInt(listeValeur, N):
+    paquetToInt = []    # liste où il y aura les paquets sont forme de int
+    for i in range(len(listeValeur)):
+        crypter = 0
+        exposant = len(listeValeur[0]) - 1  # longueur du paquet -1
+        for j in range(len(listeValeur[i])):
+            if exposant == 0:   # pow(N,0)
+                crypter = crypter + listeValeur[i][j]
+                break
+            crypter = listeValeur[i][j] * pow(N, exposant)
+            exposant = exposant - 1
+        paquetToInt.append(crypter)
+    return paquetToInt
+
+
+# permet de crypter les paquets
+def cryptPaquet(listPaquetInt, e, n):
+    paquetCrypte = []   # liste où il y aura les paquets cryptés
+    for i in range(len(listPaquetInt)):
+        paquet = pow(listPaquetInt[i], e, n)    # -> pow(liste,e)%n
+        paquetCrypte.append(paquet)
+    return paquetCrypte
+
+
+# calcule les tuples en fonction des paquets cryptés
+def makeTuple(paquetCrypte, tuple, N):
+    listOfTuple = []    # liste où il y aura les tuples des messages cryptés
+    for i in range(len(paquetCrypte)):
+        listOfTuple.append([])
+        val = paquetCrypte[i]   # on donne la valeur du paquet crypté que l'on doit mettre en tuple
+        tmp = tuple - 1 # pour l'exposant
+        for j in range(tuple):
+            test = pow(N, tmp)
+            if test > val:
+                listOfTuple[i].append(0)
+            else:
+                c = int(val / test) # on prend la partie eniter de val/test (val = c*test)
+                listOfTuple[i].append(c)
+                val = val - c * pow(N, tmp)
+            tmp = tmp - 1
+    return listOfTuple
+
+
+# permet de crypter un texte (pour l'instant txt en dur dans la fonction)
+def crypteText(e, n, message):
+    alphabet = getAlphabet()
+    N = len(alphabet)  # nombre de caracteres auxquels on a droit
+    k = int(math.log(n, N))  # k min est le nombre de tuple
+    tuple = getNbOfTheTupleAndNewN(k, N, n)
+    print('message =', message)
+    liste = fromMessageToList(message, k)  # liste avec le message séparé en bloc
+    listeValeur = getValuesOfLetters(liste)  # liste avec les valeurs
+    listPaquetInt = paquetToInt(listeValeur, N)  # liste avec les paquets converti en chiffre
+    paquetCrypte = cryptPaquet(listPaquetInt, e, n)  # liste avec les paquets cryptés
+    listOfTuple = makeTuple(paquetCrypte, tuple, N)
+    for i in range(len(liste)):
+        print(liste[i], '=>', listPaquetInt[i], '=>', paquetCrypte[i], '=>', listOfTuple[i])
+    print('----------------------------------')
 
 
 def main():
-    print('1 -> crypter et décrypter un chiffre avec p, q et e généré aléatoirement')
-    print('2 -> décrypter un chiffre avec la clé publique')
+    print('1 -> crypter et/ou décrypter un chiffre (p, q et e généré aléatoirement)')
+    print('2 -> décrypter une liste de chiffre avec la clé publique')
     print('3 -> crypter un texte avec la clé publique')
     choix = int(input('Choix : '))
     if choix == 1:
@@ -184,7 +268,9 @@ def main():
         # pour test e=3 et n=2047
         e = int(input('Entrez e : '))
         n = int(input('Entrez n : '))
-        crypteText(e, n)
+        message = str(input('Entrez le message à crypter : '))
+        message = message.upper()
+        crypteText(e, n, message)
 
 
 if __name__ == "__main__":
