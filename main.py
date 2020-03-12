@@ -7,7 +7,7 @@ def pgcd(a, b):
     if b == 0:  # si on compare a et rien
         return a
     else:
-        r = a % b   # r = a mod b
+        r = a % b  # r = a mod b
         return pgcd(b, r)
 
 
@@ -17,9 +17,9 @@ def estpremier(n):
     i = 2
     while i < nombre and nombre % i != 0:
         i = i + 1
-    if i == nombre: # si on arrive a i = nombre
+    if i == nombre:  # si on arrive a i = nombre
         return True
-    else:   # sinon si on arrive a nombre % i == 0
+    else:  # sinon si on arrive a nombre % i == 0
         return False
 
 
@@ -27,9 +27,9 @@ def estpremier(n):
 def getPAndQ():
     p = random.randint(1, 100)  # entier aléatoire entre 1 et 100
     q = random.randint(1, 100)  # entier aléatoire entre 1 et 100
-    while not estpremier(p):    # tant que p n'est pas premier
+    while not estpremier(p):  # tant que p n'est pas premier
         p = random.randint(1, 100)  # on retire p aléatoirement
-    while not estpremier(q):    # tant que p n'est pas premier
+    while not estpremier(q):  # tant que p n'est pas premier
         q = random.randint(1, 100)  # on retire q aléatoirement
     return p, q
 
@@ -61,7 +61,7 @@ def dechiffrement(chiffrement, d, n):
 def factorisation(n):
     p = n - 2
     while n % p != 0:
-        p = p - 2   # saut de 2 en 2 pour aller plus vite
+        p = p - 2  # saut de 2 en 2 pour aller plus vite
     q = int(n / p)  # comme n = p*q -> q = n/p
     return p, q
 
@@ -130,7 +130,7 @@ def crypterDecrypterChiffre():
 # decrypte un message trouver p,q,d sachant e,n,
 def decryptMessageAvecKp(e, n, message):
     L = []  # creation d'une liste ou
-    p, q = factorisation(n) # on calcule p et q avec n
+    p, q = factorisation(n)  # on calcule p et q avec n
     print('p =', p, 'q =', q)
     phiN = (p - 1) * (q - 1)  # calcule de phi(n)
     d = algoEuclidien(e, phiN)  # calcule de d
@@ -160,13 +160,14 @@ def getNbOfTheTupleAndNewN(k, N, n):
 # mettre le message (chaine de caractere) sous forme de liste en séparant par bloc
 def fromMessageToList(message, k):
     liste = []
-    if (len(message) / k) * 2 % 2 != 0: # obligé de mettre *2 -> si k=2 et len(mess)=6 -> divion=3 -> 3%2 !=0 => rajout d'un A
+    if (len(
+            message) / k) * 2 % 2 != 0:  # obligé de mettre *2 -> si k=2 et len(mess)=6 -> divion=3 -> 3%2 !=0 => rajout d'un A
         longueur = int(len(message) / k) + 1
     else:
         longueur = int(len(message) / k)
     for i in range(0, longueur):
-        liste.append([])    # liste où le message sera segmenter en paquet
-        for j in range(i * k, i * k + k):   # on fait des pas de k, car paquet de taille k
+        liste.append([])  # liste où le message sera segmenter en paquet
+        for j in range(i * k, i * k + k):  # on fait des pas de k, car paquet de taille k
             if j >= len(message):  # si on est a la fin du mot
                 liste[i].append('A')  # on met A
                 break
@@ -176,26 +177,27 @@ def fromMessageToList(message, k):
 
 # recuperer les valeurs de chaque lettre du message
 def getValuesOfLetters(liste):
-    alphabet = getAlphabet()    # on recupere l'alphabet
-    listeValeur = []    # liste où il y aura la valeur de chaque lettre
+    alphabet = getAlphabet()  # on recupere l'alphabet
+    listeValeur = []  # liste où il y aura la valeur de chaque lettre
     for i in range(len(liste)):
         listeValeur.append([])
         for j in range(len(liste[i])):
-            lettre = liste[i][j]    # on recupere la lettre
+            lettre = liste[i][j]  # on recupere la lettre
             for k in range(len(alphabet)):
-                if alphabet[k] == lettre:   # on compare la lettre a l'alphabet, tant qu'on a pas trouver la lettre -> i++
-                    listeValeur[i].append(k)    # on recupere l'indice de la lettre et on considere que c'est la valeur
+                if alphabet[
+                    k] == lettre:  # on compare la lettre a l'alphabet, tant qu'on a pas trouver la lettre -> i++
+                    listeValeur[i].append(k)  # on recupere l'indice de la lettre et on considere que c'est la valeur
     return listeValeur
 
 
 # converti les paquets en chiffre pret a etre crypter
 def paquetToInt(listeValeur, N):
-    paquetToInt = []    # liste où il y aura les paquets sont forme de int
+    paquetToInt = []  # liste où il y aura les paquets sont forme de int
     for i in range(len(listeValeur)):
         crypter = 0
         exposant = len(listeValeur[0]) - 1  # longueur du paquet -1
         for j in range(len(listeValeur[i])):
-            if exposant == 0:   # pow(N,0)
+            if exposant == 0:  # pow(N,0)
                 crypter = crypter + listeValeur[i][j]
                 break
             crypter = listeValeur[i][j] * pow(N, exposant)
@@ -204,28 +206,28 @@ def paquetToInt(listeValeur, N):
     return paquetToInt
 
 
-# permet de crypter les paquets
+# permet de crypter les chiffres (paquets convertis)
 def cryptPaquet(listPaquetInt, e, n):
-    paquetCrypte = []   # liste où il y aura les paquets cryptés
+    paquetCrypte = []  # liste où il y aura les paquets cryptés
     for i in range(len(listPaquetInt)):
-        paquet = pow(listPaquetInt[i], e, n)    # -> pow(liste,e)%n
+        paquet = pow(listPaquetInt[i], e, n)  # -> pow(liste,e)%n
         paquetCrypte.append(paquet)
     return paquetCrypte
 
 
 # calcule les tuples en fonction des paquets cryptés
 def makeTuple(paquetCrypte, tuple, N):
-    listOfTuple = []    # liste où il y aura les tuples des messages cryptés
+    listOfTuple = []  # liste où il y aura les tuples des messages cryptés
     for i in range(len(paquetCrypte)):
         listOfTuple.append([])
-        val = paquetCrypte[i]   # on donne la valeur du paquet crypté que l'on doit mettre en tuple
-        tmp = tuple - 1 # pour l'exposant
+        val = paquetCrypte[i]  # on donne la valeur du paquet crypté que l'on doit mettre en tuple
+        tmp = tuple - 1  # pour l'exposant
         for j in range(tuple):
             test = pow(N, tmp)
             if test > val:
                 listOfTuple[i].append(0)
             else:
-                c = int(val / test) # on prend la partie eniter de val/test (val = c*test)
+                c = int(val / test)  # on prend la partie eniter de val/test (val = c*test)
                 listOfTuple[i].append(c)
                 val = val - c * pow(N, tmp)
             tmp = tmp - 1
@@ -247,6 +249,74 @@ def crypteText(e, n, message):
     for i in range(len(liste)):
         print(liste[i], '=>', listPaquetInt[i], '=>', paquetCrypte[i], '=>', listOfTuple[i])
     print('----------------------------------')
+    return N, listOfTuple, tuple, k
+
+
+# converti le tuple en un chiffre (C)
+def fromTupleToSingleInt(listOfTuple, choix, tuple, N):
+    tupleToDecrypt = listOfTuple[choix - 1]
+    tmp = tuple - 1
+    val = 0
+    for i in range(len(tupleToDecrypt)):
+        val = val + tupleToDecrypt[i] * pow(N, tmp)  # tuple[i]*N^tmp
+        tmp = tmp - 1
+    return val
+
+
+# converti le message crypter en la somme des valeurs de chaque lettre
+def decryptIntToLettersValues(n, e, val):
+    p, q = factorisation(n)
+    phiN = (p - 1) * (q - 1)
+    d = algoEuclidien(e, phiN)
+    cDecrypt = dechiffrement(val, d, n)
+    return cDecrypt
+
+
+# décompose la somme des valeurs en tuples avec les valeurs de chaque lettre
+def getLettersValues(k, cDecrypt, N):
+    singleTuple = []
+    exposant = k - 1  # longueur du paquet -1
+    tmp = cDecrypt
+    while exposant >= 0:
+        if exposant == 0:
+            singleTuple.append(cDecrypt)
+            break
+        test = pow(N, exposant)
+        if test > cDecrypt:
+            singleTuple.append(0)
+            break
+        tmp = int(tmp / test)
+        singleTuple.append(tmp)
+        cDecrypt = cDecrypt - tmp * test
+        exposant = exposant - 1
+    return singleTuple
+
+
+# permet d'avoir les lettres grace au tuple
+def getLetter(singleTuple):
+    listOfLetters = []
+    for i in range(len(singleTuple)):
+        alphabet = getAlphabet()
+        aChercher = singleTuple[i]
+        listOfLetters.append(alphabet[aChercher])
+    return listOfLetters
+
+
+# permet de decrypter un tuple (from int to string)
+def decrypteText(listOfTuple, tuple, N, e, n, k):
+    print(listOfTuple)
+    choix = int(input('Entrez le tuple à décoder : '))  # tuple a decrypter
+    while choix < 1 or choix > len(listOfTuple):
+        print('Entrez un chiffre entre 1 et', len(listOfTuple), '!')
+        choix = int(input('Entrez le tuple à décoder : '))
+    print(listOfTuple[choix - 1])
+    val = fromTupleToSingleInt(listOfTuple, choix, tuple, N)  # val = message crypte
+    cDecrypt = decryptIntToLettersValues(n, e,
+                                         val)  # cDecrypt = somme des valeurs des lettres a partir du message crypte
+    singleTuple = getLettersValues(k, cDecrypt,
+                                   N)  # liste où il y aura le tuple des correspondant a la valeur de chaque lettre
+    listOfLetters = getLetter(singleTuple)
+    print(val, '=>', cDecrypt, '=>', singleTuple, '=>', listOfLetters)
 
 
 def main():
@@ -270,7 +340,8 @@ def main():
         n = int(input('Entrez n : '))
         message = str(input('Entrez le message à crypter : '))
         message = message.upper()
-        crypteText(e, n, message)
+        N, listOfTuple, tuple, k = crypteText(e, n, message)
+        decrypteText(listOfTuple, tuple, N, e, n, k)
 
 
 if __name__ == "__main__":
